@@ -102,7 +102,7 @@ def addbook():
     b = Button(button_frame, fg='white', bg='#4166F5', width=10, height=3,
                text=' ADD BOOK', command=addbooks)
     b1 = Button(button_frame, fg='white', bg='#4166F5', width=10,
-                height=3, text=' CLOSE ', command=closebooks)
+                height=3, text=' CLOSE ', command=backtoadmin)
     b.grid(row=0, column=0, padx=20)
     b1.grid(row=0, column=1, padx=20)
     win.mainloop()
@@ -120,10 +120,16 @@ def addbooks():
     admin()
 
 
-def closebooks():
+def backtoadmin():
     global win
     win.destroy()
     admin()
+
+
+def backtolbr():
+    global win
+    win.destroy()
+    libr()
 
 
 def issuebook():
@@ -143,14 +149,12 @@ def issuebook():
     entry_frame = Frame(win, height=700,  width=500, bg='#7dc5e7')
     entry_frame.pack(pady=(10))
     sid = Label(entry_frame, text='STUDENT ID', fg='black', bg='#7dc5e7')
-    # print(logged_userid)
     print_sid = Label(entry_frame, text=logged_userid,
                       fg='black', bg='#7dc5e7')
     e1 = logged_userid
     sid.pack(padx=(20, 20), pady=(10, 10))
     print_sid.pack(padx=(20, 20), pady=(10, 10))
     print_sid.config(font=('verdana', 30))
-    # e1.pack(padx=(40, 40), pady=(5, 5))
 
     no = Label(entry_frame, text='BOOK NO', fg='black', bg='#7dc5e7')
     e4 = Entry(entry_frame, width=40)
@@ -162,7 +166,7 @@ def issuebook():
     b = Button(button_frame,
                fg='white', bg='#4166F5', width=15, height=3, text=' ISSUE BOOK ', command=issuebooks)
     b1 = Button(button_frame,
-                fg='white', bg='#4166F5', width=10, height=3, text=' CLOSE ', command=closebooks)
+                fg='white', bg='#4166F5', width=10, height=3, text=' CLOSE ', command=backtolbr)
     b.grid(row=0, column=0, padx=20)
     b1.grid(row=0, column=1, padx=20)
 
@@ -271,7 +275,7 @@ def returnbook():
     b = Button(button_frame,
                fg='white', bg='#4166F5', width=15, height=3, text=' RETURN BOOK ', command=returnbooks)
     b1 = Button(button_frame,
-                fg='white', bg='#4166F5', width=10, height=3, text=' CLOSE ', command=closebooks)
+                fg='white', bg='#4166F5', width=10, height=3, text=' CLOSE ', command=backtolbr)
     b.grid(row=0, column=0, padx=20)
     b1.grid(row=0, column=1, padx=20)
     win.mainloop()
@@ -396,7 +400,7 @@ def deletebook():
     b1 = Button(button_frame, text="DELETE",
                 fg='white', bg='#4166F5', width=10, height=3, command=deletebooks)
     b2 = Button(button_frame, text="CLOSE",
-                fg='white', bg='#4166F5', width=10, height=3, command=closebooks)
+                fg='white', bg='#4166F5', width=10, height=3, command=backtoadmin)
     b1.grid(row=0, column=0, padx=10)
     b2.grid(row=0, column=1, padx=10)
 
@@ -504,7 +508,7 @@ def adduser():
     b = Button(button_frame, text="ADD USER",
                fg='white', bg='#4166F5', width=10, height=3, command=addusers)
     b1 = Button(button_frame, text="CLOSE",
-                fg='white', bg='#4166F5', width=10, height=3, command=closeusers)
+                fg='white', bg='#4166F5', width=10, height=3, command=backtoadmin)
     b.grid(row=0, column=0, padx=20)
     b1.grid(row=0, column=1, padx=20)
 
@@ -535,26 +539,11 @@ def addusers():
     connectdb()
     q = 'INSERT INTO Login VALUE("%s","%i","%s","%i")'
     global con, cur
-    # # Validation
-    # query = """select * from login where userid = %s"""
-    # cur.execute(query, e2.get())
-    # if cur.rowcount != 0:
-    #     print("'''''''''''''''''")
-    # ##
     cur.execute(q % (e1.get(), int(e2.get()), e3.get(), int(e4.get())))
-    # if(not e2.get().isnumeric() or not e4.get().isnumeric() or cur.execute(q % (e1.get(), int(e2.get()), e3.get(), int(e4.get()))) != 1):
-    #     messagebox.showerror("Error", "Invalid Input")
-    # else:
     messagebox.showinfo("User", "User Added")
     con.commit()
     win.destroy()
     closedb()
-    admin()
-
-
-def closeusers():
-    global win
-    win.destroy()
     admin()
 
 
@@ -616,7 +605,7 @@ def deleteuser():
     admin_button = Button(button_frame, text="Delete",
                           fg='white', bg='#4166F5', width=10, height=3, command=deleteusers)
     user_button = Button(button_frame, text="Close",
-                         fg='white', bg='#4166F5', width=10, height=3, command=closeusers)
+                         fg='white', bg='#4166F5', width=10, height=3, command=backtoadmin)
     admin_button.grid(row=0, column=0, padx=20)
     user_button.grid(row=0, column=1, padx=20)
 
