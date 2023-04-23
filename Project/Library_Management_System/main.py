@@ -36,7 +36,7 @@ def loginlibr():
 def libr():
     global window
     window.withdraw()
-    global win, b1, b2, b3, b4
+    global win, b1, b2, b3, b4, b5, b6
     win = Tk()
     win.title('Library')
     win.geometry("800x600")
@@ -44,13 +44,11 @@ def libr():
     win.resizable(False, False)
     text_label = Label(win, text='Select Your Choice',
                        fg='black', bg='#0096DC')
-    text_label.pack(pady=(40, 20))
+    text_label.pack(pady=(40, 40))
     text_label.config(font=('verdana', 30))
     button_frame = Frame(win, height=500, width=300, bg='#7dc5e7')
     button_frame.pack(pady=(10, 20))
 
-    b1 = Button(button_frame, fg='white', bg='#4166F5', width=40,
-                height=3, text=' Add Book ', command=addbook)
     b2 = Button(button_frame, fg='white', bg='#4166F5', width=40,
                 height=3, text=' Issue Book ', command=issuebook)
     b3 = Button(button_frame, fg='white', bg='#4166F5', width=40,
@@ -60,14 +58,12 @@ def libr():
     b5 = Button(button_frame, fg='white', bg='#4166F5', width=40,
                 height=3, text=' Issued Book ', command=issuedbook)
     b6 = Button(button_frame, fg='white', bg='#4166F5', width=40,
-                height=3, text=' Delete Book ', command=deletebook)
-    b1.grid(row=0, column=0, padx=10, pady=10)
-    b2.grid(row=1, column=0, padx=10, pady=10)
-    b3.grid(row=2, column=0, padx=10, pady=10)
-    b4.grid(row=3, column=0, padx=10, pady=10)
-    b5.grid(row=4, column=0, padx=10, pady=10)
-    b6.grid(row=5, column=0, padx=10, pady=10)
-
+                height=3, text=' LogOut ', command=logout)
+    b2.grid(row=0, column=0, padx=10, pady=(20, 10))
+    b3.grid(row=1, column=0, padx=10, pady=10)
+    b4.grid(row=2, column=0, padx=10, pady=10)
+    b5.grid(row=3, column=0, padx=10, pady=10)
+    b6.grid(row=4, column=0, padx=10, pady=10)
     win.mainloop()
 
 
@@ -121,13 +117,13 @@ def addbooks():
     win.destroy()
     messagebox.showinfo("Book", "Book Added Successfully")
     closedb()
-    libr()
+    admin()
 
 
 def closebooks():
     global win
     win.destroy()
-    libr()
+    admin()
 
 
 def issuebook():
@@ -298,6 +294,9 @@ def returnbooks():
             con.commit()
         else:
             t = str((i-e)*10)
+            a = 'DELETE FROM BookIssue WHERE serial="%s"'
+            cur.execute(a % e4.get())
+            con.commit()
             messagebox.showinfo("Fine", t[:4]+' Fine ')
     win.destroy()
     closedb()
@@ -415,7 +414,7 @@ def deletebooks():
         con.commit()
         win.destroy()
         closedb()
-        libr()
+        admin()
     else:
         messagebox.showinfo("Error", "Incorrect Password")
         closedb()
@@ -430,7 +429,7 @@ def loginadmin():
 
 def admin():
     window.withdraw()
-    global win, b1, b2, b3, b4, cur, con
+    global win, b1, b2, b3, b4, b5, b6, cur, con
     win = Tk()
     win.title('Admin')
     win.geometry("800x600")
@@ -440,8 +439,8 @@ def admin():
                        fg='black', bg='#0096DC')
     text_label.pack(pady=(40, 20))
     text_label.config(font=('verdana', 30))
-    button_frame = Frame(win, height=400, width=300, bg='#7dc5e7')
-    button_frame.pack(pady=50)
+    button_frame = Frame(win, height=500, width=300, bg='#7dc5e7')
+    button_frame.pack(pady=20)
 
     b1 = Button(button_frame, fg='white', bg='#4166F5', width=40,
                 height=3, text=' Add User ', command=adduser)
@@ -450,11 +449,21 @@ def admin():
     b3 = Button(button_frame, fg='white', bg='#4166F5', width=40,
                 height=3, text=' Delete User ', command=deleteuser)
     b4 = Button(button_frame, fg='white', bg='#4166F5', width=40,
+                height=3, text=' Add Book ', command=addbook)
+    b5 = Button(button_frame, fg='white', bg='#4166F5', width=40,
+                height=3, text=' Delete Book ', command=deletebook)
+    b6 = Button(button_frame, fg='white', bg='#4166F5', width=40,
+                height=3, text=' View Book ', command=viewbook)
+    b7 = Button(button_frame, fg='white', bg='#4166F5', width=40,
                 height=3, text=' LogOut ', command=logout)
-    b1.grid(row=0, column=0, padx=10, pady=10)
-    b2.grid(row=1, column=0, padx=10, pady=10)
-    b3.grid(row=2, column=0, padx=10, pady=10)
-    b4.grid(row=4, column=0, padx=10, pady=10)
+
+    b1.grid(row=0, column=0, padx=10, pady=5)
+    b2.grid(row=1, column=0, padx=10, pady=5)
+    b3.grid(row=2, column=0, padx=10, pady=5)
+    b4.grid(row=4, column=0, padx=10, pady=5)
+    b5.grid(row=5, column=0, padx=10, pady=5)
+    b6.grid(row=6, column=0, padx=10, pady=5)
+    b7.grid(row=7, column=0, padx=10, pady=5)
     win.mainloop()
 
 
