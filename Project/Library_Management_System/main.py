@@ -1,3 +1,9 @@
+'''
+Source code file of Library Management file
+@author1: ashutosh 
+@author2: alok   
+'''
+# importing  library files
 from tkinter import *
 import pymysql as p
 from tkinter import messagebox
@@ -5,16 +11,23 @@ from tkinter.ttk import Combobox
 from tkinter.ttk import Treeview
 import datetime
 
+# declaring all  global variables  that has been used in program
 b1, b2, b3, b4, cur, con, e1, e2, e3, e4, e5, i, ps = None, None, None, None, None, None, None, None, None, None, None, None, None
 window, win = None, None
 com1d, com1m, com1y, com2d, com2m, com2y = None, None, None, None, None, None
 logged_userid = None
+
+# list of month for date validation
 month = ['January', 'February', 'March', 'April', 'May', 'June',
          'July', 'August', 'September', 'October', 'November', 'December']
+
+# list of year for date validation
 y = list(range(2020, 2040))
+
+# list of month for date validation
 d = list(range(1, 32))
 
-
+# login function for user
 def loginlibr():
     global window
     connectdb()
@@ -32,7 +45,7 @@ def loginlibr():
         closedb()
         home()
 
-
+# user library window gui
 def libr():
     global window
     window.withdraw()
@@ -59,6 +72,7 @@ def libr():
                 height=3, text=' Issued Book ', command=issuedbook)
     b6 = Button(button_frame, fg='white', bg='#4166F5', width=40,
                 height=3, text=' LogOut ', command=logout)
+                
     b2.grid(row=0, column=0, padx=10, pady=(20, 10))
     b3.grid(row=1, column=0, padx=10, pady=10)
     b4.grid(row=2, column=0, padx=10, pady=10)
@@ -66,72 +80,19 @@ def libr():
     b6.grid(row=4, column=0, padx=10, pady=10)
     win.mainloop()
 
-
-def addbook():
-    global win
-    win.destroy()
-    win = Tk()
-    win.title('Add Book')
-    win.geometry("800x600")
-    win.configure(background='#0096DC')
-    win.resizable(False, False)
-    global e1, b, b1, e1, e2, e3, e4
-    entry_frame = Frame(win, height=400, width=500, bg='#7dc5e7')
-    entry_frame.pack(pady=30)
-    sub = Label(entry_frame, text='SUBJECT', fg='black', bg='#7dc5e7')
-    e1 = Entry(entry_frame, width=40)
-    sub.pack(padx=(20, 20), pady=(10, 10))
-    e1.pack(padx=(40, 40), pady=(5, 5))
-
-    tit = Label(entry_frame, text='TITLE', fg='black', bg='#7dc5e7')
-    tit.pack(padx=(20, 20), pady=(10, 10))
-    e2 = Entry(entry_frame, width=40)
-    e2.pack(padx=(40, 40), pady=(5, 5))
-
-    auth = Label(entry_frame, text='AUTHOR', fg='black', bg='#7dc5e7')
-    auth.pack(padx=(20, 20), pady=(10, 10))
-    e3 = Entry(entry_frame, width=40)
-    e3.pack(padx=(40, 40), pady=(5, 5))
-
-    ser = Label(entry_frame, text='SERIAL NO', fg='black', bg='#7dc5e7')
-    ser.pack(padx=(20, 20), pady=(10, 10))
-    e4 = Entry(entry_frame, width=40)
-    e4.pack(padx=(40, 40), pady=(5, 20))
-    button_frame = Frame(win, bg='#0096DC')
-    button_frame.pack(pady=(20, 20))
-    b = Button(button_frame, fg='white', bg='#4166F5', width=10, height=3,
-               text=' ADD BOOK', command=addbooks)
-    b1 = Button(button_frame, fg='white', bg='#4166F5', width=10,
-                height=3, text=' CLOSE ', command=backtoadmin)
-    b.grid(row=0, column=0, padx=20)
-    b1.grid(row=0, column=1, padx=20)
-    win.mainloop()
-
-
-def addbooks():
-    connectdb()
-    q = 'INSERT INTO Book VALUE("%s","%s","%s","%i")'
-    global cur, con
-    cur.execute(q % (e1.get(), e2.get(), e3.get(), int(e4.get())))
-    con.commit()
-    win.destroy()
-    messagebox.showinfo("Book", "Book Added Successfully")
-    closedb()
-    admin()
-
-
+# when close is called it will destroy current window and open admin window
 def backtoadmin():
     global win
     win.destroy()
     admin()
 
-
+# when close is called it will destroy current window and open user libr window
 def backtolbr():
     global win
     win.destroy()
     libr()
 
-
+# issuebook gui
 def issuebook():
     global win
     win.destroy()
@@ -140,7 +101,7 @@ def issuebook():
     win.geometry("800x600")
     win.configure(background='#0096DC')
     win.resizable(False, False)
-    text_label = Label(win, text='ISSUE Book', fg='black', bg='#0096DC')
+    text_label = Label(win, text='Issue Book', fg='black', bg='#0096DC')
     text_label.pack(pady=(30, 20))
     text_label.config(font=('verdana', 30))
 
@@ -203,13 +164,13 @@ def issuebook():
 
     win.mainloop()
 
-
+# function of issuebooks i.e using db
 def issuebooks():
     connectdb()
     # validation
     query = """select * from book where serial not in (select serial from BookIssue) and serial = %s """
     cur.execute(query, e4.get())
-    #
+    
     if cur.rowcount == 0:
         messagebox.showinfo("Book", "Book is not Available")
     else:
@@ -227,7 +188,7 @@ def issuebooks():
     closedb()
     libr()
 
-
+# return book gui
 def returnbook():
     global win
     win.destroy()
@@ -280,7 +241,7 @@ def returnbook():
     b1.grid(row=0, column=1, padx=20)
     win.mainloop()
 
-
+#  function to returnbooks i.e db
 def returnbooks():
     connectdb()
     q = 'SELECT exp FROM BookIssue WHERE serial="%s"'
@@ -306,7 +267,7 @@ def returnbooks():
     closedb()
     libr()
 
-
+#  funtion to view books
 def viewbook():
     win = Tk()
     win.title('View Books')
@@ -319,24 +280,25 @@ def viewbook():
     treeview.heading("Title", text="Title")
     treeview.heading("Author", text="Author")
     treeview.heading("Serial No", text="Serial No")
+
     treeview.column("Subject", anchor='center')
     treeview.column("Title", anchor='center')
     treeview.column("Author", anchor='center')
     treeview.column("Serial No", anchor='center')
     index = 0
-    iid = 0
+    
     connectdb()
     q = 'SELECT * FROM Book'
     cur.execute(q)
     details = cur.fetchall()
     for row in details:
-        treeview.insert("", index, iid, value=row)
-        index = iid = index+1
+        treeview.insert("", index, value=row)
+        index = index+1
     treeview.pack()
     win.mainloop()
     closedb()
 
-
+#  funtion to view issued books
 def issuedbook():
     connectdb()
     q = 'SELECT * FROM BookIssue'
@@ -344,7 +306,7 @@ def issuedbook():
     details = cur.fetchall()
     if len(details) != 0:
         win = Tk()
-        win.title('View Books')
+        win.title('Issued Books')
         win.geometry("800x600")
         win.configure(background='#0096DC')
         win.resizable(False, False)
@@ -359,10 +321,10 @@ def issuedbook():
         treeview.column("Issue Date", anchor='center')
         treeview.column("Expiry Date", anchor='center')
         index = 0
-        iid = 0
+        
         for row in details:
-            treeview.insert("", index, iid, value=row)
-            index = iid = index+1
+            treeview.insert("", index, value=row)
+            index = index+1
         treeview.pack()
         win.mainloop()
     else:
@@ -370,67 +332,14 @@ def issuedbook():
     closedb()
 
 
-def deletebook():
-    global win
-    win.destroy()
-    win = Tk()
-    win.title('Delete Book')
-    win.geometry("800x600")
-    win.configure(background='#0096DC')
-    win.resizable(False, False)
-    text_label = Label(win, text="Delete User", fg='black', bg='#0096DC')
-    text_label.pack(pady=(30, 20))
-    text_label.config(font=('verdana', '30'))
-    global e2, b2, e1
-    entry_frame = Frame(win, height=400, width=500, bg='#7dc5e7')
-    entry_frame.pack(pady=30)
-    button_frame = Frame(win, bg='#0096DC')
-    button_frame.pack(pady=(20, 20))
-
-    usid = Label(entry_frame, text='Serial NO', fg='black', bg='#7dc5e7')
-    e1 = Entry(entry_frame, width=40)
-    usid.pack(padx=(20, 20), pady=(10, 10))
-    e1.pack(padx=(40, 40), pady=(5, 5))
-
-    paswrd = Label(entry_frame, text='PASSWORD', fg='black', bg='#7dc5e7')
-    paswrd.pack(padx=(20, 20), pady=(10, 10))
-    e2 = Entry(entry_frame, width=40)
-    e2.pack(padx=(40, 40), pady=(5, 20))
-
-    b1 = Button(button_frame, text="DELETE",
-                fg='white', bg='#4166F5', width=10, height=3, command=deletebooks)
-    b2 = Button(button_frame, text="CLOSE",
-                fg='white', bg='#4166F5', width=10, height=3, command=backtoadmin)
-    b1.grid(row=0, column=0, padx=10)
-    b2.grid(row=0, column=1, padx=10)
-
-    win.mainloop()
-
-
-def deletebooks():
-    connectdb()
-    if e2.get() == 'admin':
-        q = 'DELETE FROM Book WHERE serial="%i"'
-        if(cur.execute(q % (int(e1.get()))) == 0):
-            messagebox.showinfo("Error", "Enter Valid Serial number")
-        else:
-            messagebox.showinfo("Delete", "Book Deleted")
-        con.commit()
-        win.destroy()
-        closedb()
-        admin()
-    else:
-        messagebox.showinfo("Error", "Incorrect Password")
-        closedb()
-
-
+#  function to login as admin 
 def loginadmin():
     if e1.get() == 'admin' and e2.get() == 'admin':
         admin()
     else:
         messagebox.showinfo("Error", "Invalid Input")
 
-
+#  functionality of admin
 def admin():
     window.withdraw()
     global win, b1, b2, b3, b4, b5, b6, cur, con
@@ -470,7 +379,7 @@ def admin():
     b7.grid(row=7, column=0, padx=10, pady=5)
     win.mainloop()
 
-
+#  logout function
 def logout():
     win.destroy()
     try:
@@ -479,13 +388,13 @@ def logout():
         print("Logged Out")
     home()
 
-
+# function to close connection and  DB 
 def closedb():
     global con, cur
     cur.close()
     con.close()
 
-
+# function to add user using gui 
 def adduser():
     global win
     win.destroy()
@@ -534,7 +443,7 @@ def adduser():
 
     win.mainloop()
 
-
+# function to  add user in db via gui
 def addusers():
     connectdb()
     q = 'INSERT INTO Login VALUE("%s","%i","%s","%i")'
@@ -546,7 +455,7 @@ def addusers():
     closedb()
     admin()
 
-
+# function to view user from login table
 def viewuser():
     win = Tk()
     win.geometry("800x600")
@@ -563,17 +472,17 @@ def viewuser():
     treeview.column("Branch", anchor='center')
     treeview.column("Mobile No", anchor='center')
     index = 0
-    iid = 0
+    
     connectdb()
     details = cur.fetchall()
     for row in details:
-        treeview.insert("", index, iid, value=row)
-        index = iid = index+1
+        treeview.insert("", index, value=row)
+        index = index+1
     treeview.pack()
     win.mainloop()
     closedb()
 
-
+# function to delete user ui
 def deleteuser():
     global win
     win.destroy()
@@ -611,7 +520,7 @@ def deleteuser():
 
     win.mainloop()
 
-
+# function to delete user fron login table
 def deleteusers():
     connectdb()
     print(e1, e2)
@@ -630,10 +539,121 @@ def deleteusers():
         messagebox.showinfo("Error", "Incorrect Password")
         closedb()
 
+# function to add book gui
+def addbook():
+    global win
+    win.destroy()
+    win = Tk()
+    win.title('Add Book')
+    win.geometry("800x600")
+    win.configure(background='#0096DC')
+    win.resizable(False, False)
+    global e1, b, b1, e1, e2, e3, e4
+    entry_frame = Frame(win, height=400, width=500, bg='#7dc5e7')
+    entry_frame.pack(pady=30)
+    sub = Label(entry_frame, text='SUBJECT', fg='black', bg='#7dc5e7')
+    e1 = Entry(entry_frame, width=40)
+    sub.pack(padx=(20, 20), pady=(10, 10))
+    e1.pack(padx=(40, 40), pady=(5, 5))
 
+    tit = Label(entry_frame, text='TITLE', fg='black', bg='#7dc5e7')
+    tit.pack(padx=(20, 20), pady=(10, 10))
+    e2 = Entry(entry_frame, width=40)
+    e2.pack(padx=(40, 40), pady=(5, 5))
+
+    auth = Label(entry_frame, text='AUTHOR', fg='black', bg='#7dc5e7')
+    auth.pack(padx=(20, 20), pady=(10, 10))
+    e3 = Entry(entry_frame, width=40)
+    e3.pack(padx=(40, 40), pady=(5, 5))
+
+    ser = Label(entry_frame, text='SERIAL NO', fg='black', bg='#7dc5e7')
+    ser.pack(padx=(20, 20), pady=(10, 10))
+    e4 = Entry(entry_frame, width=40)
+    e4.pack(padx=(40, 40), pady=(5, 20))
+    button_frame = Frame(win, bg='#0096DC')
+    button_frame.pack(pady=(20, 20))
+    b = Button(button_frame, fg='white', bg='#4166F5', width=10, height=3,
+               text=' ADD BOOK', command=addbooks)
+    b1 = Button(button_frame, fg='white', bg='#4166F5', width=10,
+                height=3, text=' CLOSE ', command=backtoadmin)
+    b.grid(row=0, column=0, padx=20)
+    b1.grid(row=0, column=1, padx=20)
+    win.mainloop()
+
+# function to add book in book table
+def addbooks():
+    connectdb()
+    q = 'INSERT INTO Book VALUE("%s","%s","%s","%i")'
+    global cur, con
+    cur.execute(q % (e1.get(), e2.get(), e3.get(), int(e4.get())))
+    con.commit()
+    win.destroy()
+    messagebox.showinfo("Book", "Book Added Successfully")
+    closedb()
+    admin()
+
+# function to delete book gui
+def deletebook():
+    global win
+    win.destroy()
+    win = Tk()
+    win.title('Delete Book')
+    win.geometry("800x600")
+    win.configure(background='#0096DC')
+    win.resizable(False, False)
+    text_label = Label(win, text="Delete User", fg='black', bg='#0096DC')
+    text_label.pack(pady=(30, 20))
+    text_label.config(font=('verdana', '30'))
+    global e2, b2, e1
+    entry_frame = Frame(win, height=400, width=500, bg='#7dc5e7')
+    entry_frame.pack(pady=30)
+    button_frame = Frame(win, bg='#0096DC')
+    button_frame.pack(pady=(20, 20))
+
+    usid = Label(entry_frame, text='Serial NO', fg='black', bg='#7dc5e7')
+    e1 = Entry(entry_frame, width=40)
+    usid.pack(padx=(20, 20), pady=(10, 10))
+    e1.pack(padx=(40, 40), pady=(5, 5))
+
+    paswrd = Label(entry_frame, text='PASSWORD', fg='black', bg='#7dc5e7')
+    paswrd.pack(padx=(20, 20), pady=(10, 10))
+    e2 = Entry(entry_frame, width=40)
+    e2.pack(padx=(40, 40), pady=(5, 20))
+
+    b1 = Button(button_frame, text="DELETE",
+                fg='white', bg='#4166F5', width=10, height=3, command=deletebooks)
+    b2 = Button(button_frame, text="CLOSE",
+                fg='white', bg='#4166F5', width=10, height=3, command=backtoadmin)
+    b1.grid(row=0, column=0, padx=10)
+    b2.grid(row=0, column=1, padx=10)
+
+    win.mainloop()
+
+# function to delete book from book table
+def deletebooks():
+    connectdb()
+    if e2.get() == 'admin':
+        q = 'DELETE FROM Book WHERE serial="%i"'
+        if(cur.execute(q % (int(e1.get()))) == 0):
+            messagebox.showinfo("Error", "Enter Valid Serial number")
+        else:
+            messagebox.showinfo("Delete", "Book Deleted")
+        con.commit()
+        win.destroy()
+        closedb()
+        admin()
+    else:
+        messagebox.showinfo("Error", "Incorrect Password")
+        closedb()
+
+'''
+function to  connect mysql database,
+create library database and use that 
+create table login, Book ,BookIssue 
+'''
 def connectdb():
     global con, cur
-    con = p.connect(host="localhost", user="root", passwd="Kushashu123")
+    con = p.connect(host="localhost", user="root", passwd="2001")
     cur = con.cursor()
     cur.execute('CREATE DATABASE IF NOT EXISTS Library')
     cur.execute('USE Library')
@@ -649,7 +669,7 @@ def connectdb():
     query = 'SELECT * FROM Login'
     cur.execute(query)
 
-
+# home page and driver function
 def home():
     try:
         global window, b1, b2, e1, e2, con, cur, win
@@ -687,6 +707,6 @@ def home():
     except Exception:
         window.destroy()
 
-
+# calling driver function
 enter = 1
 home()
