@@ -660,8 +660,8 @@ def connectdb():
     global enter
     if enter == 1:
         l = 'CREATE TABLE IF NOT EXISTS Login(name varchar(20),userid varchar(10) primary key,branch varchar(20),mobile int(10))'
-        b = 'CREATE TABLE IF NOT EXISTS Book(subject varchar(20),title varchar(20),author varchar(20),serial int(5) primary key)'
-        i = 'CREATE TABLE IF NOT EXISTS BookIssue(stdid varchar(20),serial varchar(10),issue date,exp date)'
+        b = 'CREATE TABLE IF NOT EXISTS Book(subject varchar(20),title varchar(20),author varchar(20),serial int primary key)'
+        i = 'CREATE TABLE IF NOT EXISTS BookIssue(stdid varchar(20),serial int ,issue date,exp date)'
         cur.execute(l)
         cur.execute(b)
         cur.execute(i)
