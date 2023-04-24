@@ -28,6 +28,8 @@ y = list(range(2020, 2040))
 d = list(range(1, 32))
 
 # login function for user
+
+
 def loginlibr():
     global window
     connectdb()
@@ -46,6 +48,8 @@ def loginlibr():
         home()
 
 # user library window gui
+
+
 def libr():
     global window
     window.withdraw()
@@ -72,7 +76,7 @@ def libr():
                 height=3, text=' Issued Book ', command=issuedbook)
     b6 = Button(button_frame, fg='white', bg='#4166F5', width=40,
                 height=3, text=' LogOut ', command=logout)
-                
+
     b2.grid(row=0, column=0, padx=10, pady=(20, 10))
     b3.grid(row=1, column=0, padx=10, pady=10)
     b4.grid(row=2, column=0, padx=10, pady=10)
@@ -81,18 +85,24 @@ def libr():
     win.mainloop()
 
 # when close is called it will destroy current window and open admin window
+
+
 def backtoadmin():
     global win
     win.destroy()
     admin()
 
 # when close is called it will destroy current window and open user libr window
+
+
 def backtolbr():
     global win
     win.destroy()
     libr()
 
 # issuebook gui
+
+
 def issuebook():
     global win
     win.destroy()
@@ -165,12 +175,14 @@ def issuebook():
     win.mainloop()
 
 # function of issuebooks i.e using db
+
+
 def issuebooks():
     connectdb()
     # validation
     query = """select * from book where serial not in (select serial from BookIssue) and serial = %s """
     cur.execute(query, e4.get())
-    
+
     if cur.rowcount == 0:
         messagebox.showinfo("Book", "Book is not Available")
     else:
@@ -189,6 +201,8 @@ def issuebooks():
     libr()
 
 # return book gui
+
+
 def returnbook():
     global win
     win.destroy()
@@ -242,6 +256,8 @@ def returnbook():
     win.mainloop()
 
 #  function to returnbooks i.e db
+
+
 def returnbooks():
     connectdb()
     q = 'SELECT exp FROM BookIssue WHERE serial="%s"'
@@ -268,6 +284,8 @@ def returnbooks():
     libr()
 
 #  funtion to view books
+
+
 def viewbook():
     win = Tk()
     win.title('View Books')
@@ -286,7 +304,7 @@ def viewbook():
     treeview.column("Author", anchor='center')
     treeview.column("Serial No", anchor='center')
     index = 0
-    
+
     connectdb()
     q = 'SELECT * FROM Book'
     cur.execute(q)
@@ -299,6 +317,8 @@ def viewbook():
     closedb()
 
 #  funtion to view issued books
+
+
 def issuedbook():
     connectdb()
     q = 'SELECT * FROM BookIssue'
@@ -321,7 +341,7 @@ def issuedbook():
         treeview.column("Issue Date", anchor='center')
         treeview.column("Expiry Date", anchor='center')
         index = 0
-        
+
         for row in details:
             treeview.insert("", index, value=row)
             index = index+1
@@ -332,7 +352,7 @@ def issuedbook():
     closedb()
 
 
-#  function to login as admin 
+#  function to login as admin
 def loginadmin():
     if e1.get() == 'admin' and e2.get() == 'admin':
         admin()
@@ -340,6 +360,8 @@ def loginadmin():
         messagebox.showinfo("Error", "Invalid Input")
 
 #  functionality of admin
+
+
 def admin():
     window.withdraw()
     global win, b1, b2, b3, b4, b5, b6, cur, con
@@ -380,6 +402,8 @@ def admin():
     win.mainloop()
 
 #  logout function
+
+
 def logout():
     win.destroy()
     try:
@@ -388,13 +412,17 @@ def logout():
         print("Logged Out")
     home()
 
-# function to close connection and  DB 
+# function to close connection and  DB
+
+
 def closedb():
     global con, cur
     cur.close()
     con.close()
 
-# function to add user using gui 
+# function to add user using gui
+
+
 def adduser():
     global win
     win.destroy()
@@ -444,6 +472,8 @@ def adduser():
     win.mainloop()
 
 # function to  add user in db via gui
+
+
 def addusers():
     connectdb()
     q = 'INSERT INTO Login VALUE("%s","%i","%s","%i")'
@@ -456,6 +486,8 @@ def addusers():
     admin()
 
 # function to view user from login table
+
+
 def viewuser():
     win = Tk()
     win.geometry("800x600")
@@ -472,7 +504,7 @@ def viewuser():
     treeview.column("Branch", anchor='center')
     treeview.column("Mobile No", anchor='center')
     index = 0
-    
+
     connectdb()
     details = cur.fetchall()
     for row in details:
@@ -483,6 +515,8 @@ def viewuser():
     closedb()
 
 # function to delete user ui
+
+
 def deleteuser():
     global win
     win.destroy()
@@ -521,6 +555,8 @@ def deleteuser():
     win.mainloop()
 
 # function to delete user fron login table
+
+
 def deleteusers():
     connectdb()
     print(e1, e2)
@@ -540,6 +576,8 @@ def deleteusers():
         closedb()
 
 # function to add book gui
+
+
 def addbook():
     global win
     win.destroy()
@@ -581,6 +619,8 @@ def addbook():
     win.mainloop()
 
 # function to add book in book table
+
+
 def addbooks():
     connectdb()
     q = 'INSERT INTO Book VALUE("%s","%s","%s","%i")'
@@ -593,6 +633,8 @@ def addbooks():
     admin()
 
 # function to delete book gui
+
+
 def deletebook():
     global win
     win.destroy()
@@ -630,6 +672,8 @@ def deletebook():
     win.mainloop()
 
 # function to delete book from book table
+
+
 def deletebooks():
     connectdb()
     if e2.get() == 'admin':
@@ -646,22 +690,25 @@ def deletebooks():
         messagebox.showinfo("Error", "Incorrect Password")
         closedb()
 
+
 '''
 function to  connect mysql database,
 create library database and use that 
 create table login, Book ,BookIssue 
 '''
+
+
 def connectdb():
     global con, cur
-    con = p.connect(host="localhost", user="root", passwd="2001")
+    con = p.connect(host="localhost", user="root", passwd="Kushashu123")
     cur = con.cursor()
     cur.execute('CREATE DATABASE IF NOT EXISTS Library')
     cur.execute('USE Library')
     global enter
     if enter == 1:
         l = 'CREATE TABLE IF NOT EXISTS Login(name varchar(20),userid varchar(10) primary key,branch varchar(20),mobile int(10))'
-        b = 'CREATE TABLE IF NOT EXISTS Book(subject varchar(20),title varchar(20),author varchar(20),serial int(5) primary key)'
-        i = 'CREATE TABLE IF NOT EXISTS BookIssue(stdid varchar(20),serial varchar(10),issue date,exp date)'
+        b = 'CREATE TABLE IF NOT EXISTS Book(subject varchar(20),title varchar(20),author varchar(20),serial int primary key)'
+        i = 'CREATE TABLE IF NOT EXISTS BookIssue(stdid varchar(20),serial int ,issue date,exp date)'
         cur.execute(l)
         cur.execute(b)
         cur.execute(i)
@@ -670,6 +717,8 @@ def connectdb():
     cur.execute(query)
 
 # home page and driver function
+
+
 def home():
     try:
         global window, b1, b2, e1, e2, con, cur, win
@@ -706,6 +755,7 @@ def home():
         window.mainloop()
     except Exception:
         window.destroy()
+
 
 # calling driver function
 enter = 1
